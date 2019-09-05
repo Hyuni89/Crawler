@@ -4,7 +4,6 @@ import com.hyuni.crawler.category.page.Page
 import com.hyuni.crawler.exception.InvalidPageException
 import org.springframework.stereotype.Component
 
-@Component
 class FeatureResponse: CommonResponse() {
 
     private var prev_url: String = ""

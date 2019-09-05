@@ -1,12 +1,10 @@
 package com.hyuni.crawler
 
-import com.hyuni.crawler.category.page.Page
 import com.hyuni.crawler.exception.CrawlerException
 import com.hyuni.crawler.exception.ExpiredTokenException
 import com.hyuni.crawler.request.CommonRequest
 import com.hyuni.crawler.response.CommonResponse
 import com.hyuni.crawler.response.ExpiredResponse
-import com.hyuni.crawler.response.FeatureResponse
 import com.hyuni.crawler.response.LoginResponse
 import com.hyuni.crawler.util.TokenGenerator
 import com.hyuni.crawler.util.constant.ErrorCode.Companion.INVALID_TOKEN
@@ -28,9 +26,6 @@ class CrawlerController {
 
     @Autowired
     lateinit var loginResponse: LoginResponse
-
-    @Autowired
-    lateinit var featureResponse: FeatureResponse
 
     @Autowired
     lateinit var expiredResponse: ExpiredResponse
@@ -62,20 +57,16 @@ class CrawlerController {
             return commonResponse
         }
 
-        val result: Page?
-        try {
-            result = serviceRouter.feature(token, category, page)
-            featureResponse.setResponse(result)
+        return try {
+            serviceRouter.feature(token, category, page)
         } catch(e: ExpiredTokenException) {
             expiredResponse.setScore(e.score)
             expiredResponse.setStatus(e.errorCode())
-            return expiredResponse
+            expiredResponse
         } catch(e: CrawlerException) {
             commonResponse.setStatus(e.errorCode())
-            return commonResponse
+            commonResponse
         }
-
-        return featureResponse
     }
 
     @PostMapping("/{category}/save")

@@ -3,6 +3,7 @@ package com.hyuni.crawler.category
 import com.hyuni.crawler.category.page.Page
 import com.hyuni.crawler.category.page.UnitPair
 import com.hyuni.crawler.exception.InvalidPageException
+import com.hyuni.crawler.response.FeatureResponse
 import com.hyuni.crawler.util.FileGenerator
 import com.hyuni.crawler.util.constant.Action
 import java.util.*
@@ -24,6 +25,7 @@ class Category(
     private var remainCnt: Int = 0
     private var wrongCnt: Int = 0
     private var genFlag: Boolean = false
+    private val featureResponse: FeatureResponse = FeatureResponse()
 
     private fun appendPage(): Page {
         val page = Page(CATEGORY, pages.size + 1)
@@ -41,7 +43,7 @@ class Category(
         val genPages = Random().nextInt(PAGE_GENERATE_SEED)
         val delay = Random().nextInt(DELAY_SEED)
         val change = Random().nextInt(CHANGE_IMAGE_SEED + 1)
-        println("Logging:: genPage[$genPages], delay[$delay], change[$change]")
+//        println("Logging:: category[$CATEGORY], genPage[$genPages], delay[$delay], change[$change]")
 
         Thread(Runnable {
             Thread.sleep((delay * 1000).toLong())
@@ -55,7 +57,7 @@ class Category(
                         val toggleAction = if(pair.action == Action.SAVE) Action.DELETE else Action.SAVE
 
                         page.unit[index] = UnitPair(pair.name, toggleAction)
-                        println("Logging:: page[${pair.name}][${pair.action}] inserted page[$index] toggled")
+//                        println("Logging:: page[${pair.name}][${pair.action}] inserted page[$index] toggled")
                     }
                 }
 
@@ -66,16 +68,18 @@ class Category(
         }).start()
     }
 
-    fun feature(index: Int): Page {
+    fun feature(index: Int): FeatureResponse {
         val want = index - 1
         if(want == pages.size) {
             if(!genFlag) generate()
-            return pages[pages.size - 1]
+            featureResponse.setResponse(pages[pages.size - 1])
+            return featureResponse
         } else if(want < 0 || want > pages.size) {
             throw InvalidPageException()
         }
 
-        return pages[want]
+        featureResponse.setResponse(pages[want])
+        return featureResponse
     }
 
     fun save(images: List<String>) {
@@ -109,7 +113,7 @@ class Category(
             }
         }
 
-        println("Logging:: correctCnt[$correctCnt], lostCnt[$lostCnt], remainCnt[$remainCnt], wrongCnt[$wrongCnt]")
+        println("Logging:: category[$CATEGORY], correctCnt[$correctCnt], lostCnt[$lostCnt], remainCnt[$remainCnt], wrongCnt[$wrongCnt]")
         return NORMAL_WEIGHT * correctCnt - LOST_WEIGHT * lostCnt - REMAIN_WEIGHT * remainCnt - WRONG_WEIGHT * wrongCnt
     }
 

@@ -1,9 +1,7 @@
 package com.hyuni.crawler.util
 
-import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
 class FileGenerator private constructor() {
 
     private val postfixSize = 16

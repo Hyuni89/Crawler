@@ -4,6 +4,7 @@ import com.hyuni.crawler.category.page.Page
 import com.hyuni.crawler.exception.CrawlerException
 import com.hyuni.crawler.exception.InvalidCategoryException
 import com.hyuni.crawler.exception.InvalidTokenException
+import com.hyuni.crawler.response.FeatureResponse
 import com.hyuni.crawler.util.constant.ErrorCode.Companion.INVALID_CATEGORY
 import com.hyuni.crawler.util.constant.ErrorCode.Companion.INVALID_TOKEN
 import org.springframework.stereotype.Service
@@ -26,7 +27,7 @@ class ServiceRouter {
     }
 
     @Throws(CrawlerException::class)
-    fun feature(token: String, category: String, page: Int): Page? {
+    fun feature(token: String, category: String, page: Int): FeatureResponse {
         val service: CrawlerService = router[token] ?: throw InvalidTokenException()
         val cate: Int = parseCategory(category) ?: throw InvalidCategoryException()
 
