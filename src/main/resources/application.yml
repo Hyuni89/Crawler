@@ -1,0 +1,24 @@
+news:
+  generate: 3
+  change: 1
+  delay: 5
+
+art:
+  generate: 5
+  change: 8
+  delay: 10
+
+blog:
+  generate: 10
+  change: 10
+  delay: 3
+
+music:
+  generate: 1
+  change: 3
+  delay: 5
+
+sport:
+  generate: 7
+  change: 5
+  delay: 5

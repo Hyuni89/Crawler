@@ -19,12 +19,12 @@ class CrawlerService(
     private val categories: MutableList<Category> = mutableListOf()
     private var score: Double? = null
 
-    fun init() {
-        categories.add(Category("news", 3, 1, 5))
-        categories.add(Category("art", 5, 8, 10))
-        categories.add(Category("blog", 10, 10, 3))
-        categories.add(Category("music", 1, 3, 5))
-        categories.add(Category("sport", 7, 5, 5))
+    fun init(constants: Constants) {
+        categories.add(Category("news", constants.NEWS_GENERATE, constants.NEWS_CHANGE, constants.NEWS_DELAY))
+        categories.add(Category("art", constants.ART_GENERATE, constants.ART_CHANGE, constants.ART_DELAY))
+        categories.add(Category("blog", constants.BLOG_GENERATE, constants.BLOG_CHANGE, constants.BLOG_DELAY))
+        categories.add(Category("music", constants.MUSIC_GENERATE, constants.MUSIC_CHANGE, constants.MUSIC_DELAY))
+        categories.add(Category("sport", constants.SPORT_GENERATE, constants.SPORT_CHANGE, constants.SPORT_DELAY))
 
         isRunning = true
         Timer().schedule(LIFETIME) {

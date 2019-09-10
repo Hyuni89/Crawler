@@ -1,12 +1,10 @@
 package com.hyuni.crawler
 
-import com.hyuni.crawler.category.page.Page
 import com.hyuni.crawler.exception.CrawlerException
 import com.hyuni.crawler.exception.InvalidCategoryException
 import com.hyuni.crawler.exception.InvalidTokenException
 import com.hyuni.crawler.response.FeatureResponse
-import com.hyuni.crawler.util.constant.ErrorCode.Companion.INVALID_CATEGORY
-import com.hyuni.crawler.util.constant.ErrorCode.Companion.INVALID_TOKEN
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,13 +12,16 @@ class ServiceRouter {
 
     val router: MutableMap<String, CrawlerService> = mutableMapOf()
 
+    @Autowired
+    lateinit var constants: Constants
+
     fun register(token: String): Boolean {
         if(router.containsKey(token)) {
             return false
         }
 
         val newOne = CrawlerService(token)
-        newOne.init()
+        newOne.init(constants)
         router[token] = newOne
 
         return true
